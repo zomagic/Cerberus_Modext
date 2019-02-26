@@ -1,9 +1,15 @@
 # Cerberus_Modext
+
+https://youtu.be/51EUSbSFIN0
+
 Purpose: Auto download a collectioin of External Modules for CerberusX https://www.cerberus-x.com/wordpress/
 
 To use/install, copy this file into /bin/ folder of Cerberus
 - modext.exe
 - modext.txt
+
+WARNING!! All existing file and folder in Cerberus\modules_ext\
+will be replace by the version from Github if there are downloaded.
 
 The modext.txt act like a source file to tell the program what to download or what to do.
 # Command
