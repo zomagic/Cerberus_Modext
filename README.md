@@ -5,7 +5,7 @@ To use/install, copy this file into /bin/ folder of Cerberus
 - modext.exe
 - modext.txt
 
-The modext.txt is a source file to tell the program what to download or what to do.
+The modext.txt act like a source file to tell the program what to download or what to do.
 # Command
 Use DOWNLOAD= command to download a file from github.
 - First parameter is the download address(NO sub folder).
