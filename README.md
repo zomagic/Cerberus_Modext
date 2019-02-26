@@ -1,4 +1,7 @@
 # Cerberus_Modext
+
+https://youtu.be/51EUSbSFIN0
+
 Purpose: Auto download a collectioin of External Modules for CerberusX https://www.cerberus-x.com/wordpress/
 
 To use/install, copy this file into /bin/ folder of Cerberus
