@@ -5,7 +5,7 @@ To use/install, copy this file into /bin/ folder of Cerberus
 - modext.exe
 - modext.txt
 
-The modext.txt is a source file to tell the program what to download or what to do.
+The modext.txt act like a source file to tell the program what to download or what to do.
 # Command
 Use DOWNLOAD= command to download a file from github.
 - First parameter is the download address(NO sub folder).
@@ -14,4 +14,6 @@ Use DOWNLOAD= command to download a file from github.
 Use COPY command to copy from folder to another folder (only inside Cerberus\modules_ext\ is allow) </br>
 - Need to parameter which is the source and destination.</br>
 
+The source file is using Purebasic https://www.purebasic.com/
+- modext.pb
 
