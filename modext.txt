@@ -1,0 +1,13 @@
+//use DOWNLOAD command to download a file from github. First parameter is the download address(NO sub folder). The second parameter is folder name to be use in Cerberus\modules_ext\? .This is optional. If not supply it will use the github project name.
+//use COPY command to copy from folder to another folder (only inside Cerberus\modules_ext\ is allow)  
+
+DOWNLOAD="https://github.com/swoolcock/diddy"
+COPY="diddy\src\diddy","diddy"
+COPY="diddy\src\threading","threading"
+DOWNLOAD="https://github.com/JaviCervera/vortex"
+DOWNLOAD="https://github.com/KrautApps/Realtime","realtime"
+COPY="realtime\modules_ext\realtime","realtime"
+DOWNLOAD="https://github.com/ootsby/GIF-Loader","gif"
+DOWNLOAD="https://github.com/MikeHart66/fantomX"
+DOWNLOAD="https://github.com/IvelleGames/CerberusSDL2_Mixer","sdl2mixer"
+COPY="sdl2mixer\modules_ext\sdl2mixer","sdl2mixer"
