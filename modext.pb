@@ -14,15 +14,21 @@ Global modules_extPath$ = Left(binPath$,Len(binPath$)-4)+"modules_ext\"
 Global ConsoleY=0
 Procedure Download(addr$,name$="")
 	If name$=""
-		replacename$=""
 		name$ = StringField(addr$,CountString(addr$,"/")+1, "/")
-	Else
-		replacename$ = StringField(addr$,CountString(addr$,"/")+1, "/")
 	EndIf
+	source=0
 	Print ("Process: "+name$)
 	ConsoleY=ConsoleY+1
 	progressState=0
- 	Download = ReceiveHTTPFile(addr$+"/archive/master.zip", modules_extPath$+name$+".zip",#PB_HTTP_Asynchronous)
+	If FindString(addr$,"github.com")<>0
+		If Right(addr$,4)<>".zip"
+			Download = ReceiveHTTPFile(addr$+"/archive/master.zip", modules_extPath$+name$+".zip",#PB_HTTP_Asynchronous)
+		Else
+			Download = ReceiveHTTPFile(addr$,modules_extPath$+name$+".zip",#PB_HTTP_Asynchronous)
+		EndIf
+	Else
+		Download = ReceiveHTTPFile(addr$,modules_extPath$+name$+".zip",#PB_HTTP_Asynchronous)
+	EndIf
  	If Download
  	    Repeat
  			Progress = HTTPProgress(Download)
@@ -37,16 +43,20 @@ Procedure Download(addr$,name$="")
 						While NextPackEntry(0)
 							If PackEntryType(0)=#PB_Packer_Directory
 								filename$=modules_extPath$+PackEntryName(0)
-								filename$=ReplaceString(filename$,"-master","")
-								If replacename$<>""
+								pos=FindString(PackEntryName(0),"/")
+								If pos>0
+									;find the name of first folder to be rename
+									replacename$=Left(PackEntryName(0),pos-1)
 									filename$=ReplaceString(filename$,replacename$,name$)
 								EndIf
 								filename$=ReplaceString(filename$,"/","\")
 								CreateDirectory(filename$)
 							Else
 								filename$=modules_extPath$+PackEntryName(0)
-								filename$=ReplaceString(filename$,"-master","")
-								If replacename$<>""
+								pos=FindString(PackEntryName(0),"/")
+								If pos>0
+									;find the name of first folder to be rename
+									replacename$=Left(PackEntryName(0),pos-1)
 									filename$=ReplaceString(filename$,replacename$,name$)
 								EndIf
 								filename$=ReplaceString(filename$,"/","\")
@@ -88,18 +98,19 @@ Procedure Download(addr$,name$="")
  			EndSelect
  			Delay(500) ; Don't stole the whole CPU
  		ForEver
- 		
  	Else
  		PrintN ("Download error")	
  	EndIf
 EndProcedure
 
-file=ReadFile(#PB_Any, binPath$+"modext.txt",#PB_UTF8)
+file=ReadFile(#PB_Any, binPath$+"modext.winnt.txt",#PB_UTF8)
 If file<>0
 	Repeat
-		dat$=ReadString(file)
-		instruction$=UCase(StringField(dat$,1,"="))
-		dat$=StringField(dat$,2,"=")
+		dat$=ReadString(file)	
+		dat$=StringField(dat$,1,"'") ;eliminate rem
+		dat$=ReplaceString(dat$,Chr(9),"")
+		instruction$=Trim(UCase(StringField(dat$,1,"="))) ;get instruction
+		dat$=Trim(StringField(dat$,2,"=")) ;get parameter
 		Select instruction$
 			Case "DOWNLOAD"
 				If FindString(dat$,",")<>0
@@ -111,22 +122,37 @@ If file<>0
 					If FindString(dat$,Chr(34))<>0
 						dat$=ReplaceString(dat$,Chr(34),"")	
 					EndIf
-					Download(dat$,name$)
+					Download(Trim(dat$),Trim(name$))
 				Else
 					If FindString(dat$,Chr(34))<>0
 						dat$=ReplaceString(dat$,Chr(34),"")	
 					EndIf
-					Download(dat$)
+					
+					Download(Trim(dat$))
 				EndIf
 			Case "COPY"
 				from$=StringField(dat$,1,",")
 				If FindString(from$,Chr(34))<>0
 					from$=ReplaceString(from$,Chr(34),"")	
 				EndIf
+				from$=Trim(from$)+"\"
 				into$=StringField(dat$,2,",")
 				If FindString(into$,Chr(34))<>0
 					into$=ReplaceString(into$,Chr(34),"")	
 				EndIf
+				into$=Trim(into$)+"\"
+				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
+			Case "MOVE"
+				from$=StringField(dat$,1,",")
+				If FindString(from$,Chr(34))<>0
+					from$=ReplaceString(from$,Chr(34),"")	
+				EndIf
+				from$=Trim(from$)+"\"
+				into$=StringField(dat$,2,",")
+				If FindString(into$,Chr(34))<>0
+					into$=ReplaceString(into$,Chr(34),"")	
+				EndIf
+				into$=Trim(into$)+"\"
 				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
 				DeleteDirectory(modules_extPath$+from$,"",#PB_FileSystem_Recursive)
 		EndSelect
@@ -140,7 +166,7 @@ CloseConsole()
 
 ; IDE Options = PureBasic 5.41 LTS (Windows - x86)
 ; ExecutableFormat = Console
-; CursorPosition = 3
+; CursorPosition = 105
 ; Folding = +
 ; EnableUnicode
 ; EnableXP
