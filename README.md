@@ -13,8 +13,7 @@ This is the file.
 - modext.pb
 
 WARNING!! Before run modext.exe, Please backup your Cerberus\modules_ext\ folder.
-All existing file and folder in Cerberus\modules_ext\
-will be replace by the new version once they are downloaded.
+All existing file and folder in Cerberus\modules_ext\ will be replace by the new version once they are downloaded.
 
 This is the list of module to be download by the app
 - FantomCX
