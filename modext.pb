@@ -12,10 +12,55 @@ CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
 CompilerElse
 	Global SL$="\"
 CompilerEndIf
-Global modules_extPath$ = Left(binPath$,Len(binPath$)-4)+"modules_ext"+SL$
-Procedure Download(addr$,name$="")
+;---------READING COMMANDLINE
+Global NewList update.s()
+Global ModuleFolder$="modules_ext"
+cline$=ProgramParameter()
+While cline$<>""
+	cmd$=Trim(UCase(StringField(cline$,1,"=")))
+	opt$=Trim(StringField(cline$,2,"="))
+	Select cmd$
+		Case "-UPDATE"
+			If opt$=""
+				AddElement(update())
+				update()="ALL"
+			Else
+				For k = 1 To CountString(opt$,",")+1
+					folder$ = StringField(opt$, k, ",")
+					AddElement(update())
+					update()=folder$
+				Next
+			EndIf
+		Case "-INTO"
+			If opt$	<> ""
+				ModuleFolder$=opt$
+			EndIf
+	EndSelect
+	
+	cline$=ProgramParameter()
+Wend
+Global modules_extPath$ = Left(binPath$,Len(binPath$)-4)+ModuleFolder$+SL$
+If FileSize(modules_extPath$)<>-2
+	CreateDirectory(modules_extPath$)
+EndIf
+Procedure Download(addr$,name$="",replace=0)
 	If name$="":name$ = StringField(addr$,CountString(addr$,"/")+1, "/"):EndIf
-	Print ("Process: "+name$+" - download .")
+	Print ("Process: "+name$)
+	If replace=0
+		If FileSize(modules_extPath$+name$)=-2 ;check folder exist?
+			needupdate=0
+			ForEach update() 
+				If update()=name$ Or update()="ALL"
+					needupdate=1
+				EndIf
+			Next
+			If needupdate=0
+				PrintN (" - skip!")
+				ProcedureReturn 
+			EndIf
+		EndIf
+	EndIf
+	Print (" - download .")
 	progressState=0
 	If FindString(addr$,"github.com")<>0
 		If Right(addr$,4)<>".zip"
@@ -88,7 +133,8 @@ Procedure Download(addr$,name$="")
  	Else
  		PrintN ("Download error")	
  	EndIf
-EndProcedure
+ EndProcedure
+;---------READING INPUT
 CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
 	file=ReadFile(#PB_Any, binPath$+"modext.macos.txt",#PB_UTF8)
 CompilerElse
@@ -100,6 +146,11 @@ If file<>0
 		dat$=StringField(dat$,1,"'") ;eliminate rem
 		dat$=ReplaceString(dat$,Chr(9),"")
 		instruction$=Trim(UCase(StringField(dat$,1,"="))) ;get instruction
+		replace=0
+		If FindString(instruction$,"!")<>0
+			instruction$=ReplaceString(instruction$,"!","")
+			replace=1
+		EndIf
 		dat$=Trim(StringField(dat$,2,"=")) ;get parameter
 		Select instruction$
 			Case "DOWNLOAD"
@@ -112,12 +163,12 @@ If file<>0
 					If FindString(dat$,Chr(34))<>0
 						dat$=ReplaceString(dat$,Chr(34),"")	
 					EndIf
-					Download(Trim(dat$),Trim(name$))
+					Download(Trim(dat$),Trim(name$),replace)
 				Else
 					If FindString(dat$,Chr(34))<>0
 						dat$=ReplaceString(dat$,Chr(34),"")	
 					EndIf
-					Download(Trim(dat$))
+					Download(Trim(dat$),"",replace)
 				EndIf
 			Case "COPY"
 				from$=StringField(dat$,1,",")
@@ -130,6 +181,19 @@ If file<>0
 					into$=ReplaceString(into$,Chr(34),"")	
 				EndIf
 				into$=Trim(into$)+SL$
+				If replace=0
+					If FileSize(modules_extPath$+into$)=-2 ;check folder exist?
+						needupdate=0
+						ForEach update() 
+							If update()=name$ Or update()="ALL"
+								needupdate=1
+							EndIf
+						Next
+						If needupdate=0
+							Goto done
+						EndIf
+					EndIf
+				EndIf				
 				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
 			Case "MOVE"
 				from$=StringField(dat$,1,",")
@@ -142,9 +206,23 @@ If file<>0
 					into$=ReplaceString(into$,Chr(34),"")	
 				EndIf
 				into$=Trim(into$)+SL$
+				If replace=0
+					If FileSize(modules_extPath$+into$)=-2 ;check folder exist?
+						needupdate=0
+						ForEach update() 
+							If update()=name$ Or update()="ALL"
+								needupdate=1
+							EndIf
+						Next
+						If needupdate=0
+							Goto done
+						EndIf
+					EndIf
+				EndIf				
 				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
 				DeleteDirectory(modules_extPath$+from$,"",#PB_FileSystem_Recursive)
 		EndSelect
+		done:
 	Until Eof(file)
 	CloseFile(file)	
 EndIf
@@ -153,8 +231,9 @@ Delay(2000)
 CloseConsole()
 ; IDE Options = PureBasic 5.41 LTS (Windows - x86)
 ; ExecutableFormat = Console
-; CursorPosition = 9
-; Folding = s
+; CursorPosition = 14
+; FirstLine = 165
+; Folding = u
 ; EnableXP
 ; Executable = modext.exe
 ; CompileSourceDirectory
