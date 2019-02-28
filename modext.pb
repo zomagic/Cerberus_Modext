@@ -1,8 +1,5 @@
 ﻿OpenConsole()
-EnableGraphicalConsole(1)
-ConsoleCursor(0)
 UseZipPacker()
-
 ConsoleTitle ("ModExt")  
 PrintN ("Cerberus - Modules External Download")
 If InitNetwork() = 0
@@ -10,15 +7,15 @@ If InitNetwork() = 0
   End
 EndIf
 Global binPath$ = GetPathPart(ProgramFilename())
-Global modules_extPath$ = Left(binPath$,Len(binPath$)-4)+"modules_ext\"
-Global ConsoleY=0
+CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+	Global SL$="/"
+CompilerElse
+	Global SL$="\"
+CompilerEndIf
+Global modules_extPath$ = Left(binPath$,Len(binPath$)-4)+"modules_ext"+SL$
 Procedure Download(addr$,name$="")
-	If name$=""
-		name$ = StringField(addr$,CountString(addr$,"/")+1, "/")
-	EndIf
-	source=0
-	Print ("Process: "+name$)
-	ConsoleY=ConsoleY+1
+	If name$="":name$ = StringField(addr$,CountString(addr$,"/")+1, "/"):EndIf
+	Print ("Process: "+name$+" - download .")
 	progressState=0
 	If FindString(addr$,"github.com")<>0
 		If Right(addr$,4)<>".zip"
@@ -33,12 +30,10 @@ Procedure Download(addr$,name$="")
  	    Repeat
  			Progress = HTTPProgress(Download)
  			Select Progress
- 			Case #PB_Http_Success
- 				ConsoleLocate(Len(name$)+10,ConsoleY)		
- 				Print("- uncompress")
+ 			Case #PB_Http_Success	
+ 				Print(" uncompress")
  				CreateDirectory(modules_extPath$+name$)
  				If OpenPack(0,modules_extPath$+name$+".zip") 
-					; List all the entries
 					If ExaminePack(0)
 						While NextPackEntry(0)
 							If PackEntryType(0)=#PB_Packer_Directory
@@ -49,7 +44,11 @@ Procedure Download(addr$,name$="")
 									replacename$=Left(PackEntryName(0),pos-1)
 									filename$=ReplaceString(filename$,replacename$,name$)
 								EndIf
-								filename$=ReplaceString(filename$,"/","\")
+								CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+									filename$=ReplaceString(filename$,"\","/")
+								CompilerElse
+									filename$=ReplaceString(filename$,"/","\")
+								CompilerEndIf
 								CreateDirectory(filename$)
 							Else
 								filename$=modules_extPath$+PackEntryName(0)
@@ -59,42 +58,30 @@ Procedure Download(addr$,name$="")
 									replacename$=Left(PackEntryName(0),pos-1)
 									filename$=ReplaceString(filename$,replacename$,name$)
 								EndIf
-								filename$=ReplaceString(filename$,"/","\")
+								CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+									filename$=ReplaceString(filename$,"\","/")
+								CompilerElse
+									filename$=ReplaceString(filename$,"/","\")
+								CompilerEndIf
 								UncompressPackFile(0, filename$)
 							EndIf
 						Wend
 					EndIf
-					ClosePack(0)
-					ConsoleLocate(Len(name$)+10,ConsoleY)		
-					PrintN("- done      ")
+					ClosePack(0)		
+					PrintN(" - done")
 					DeleteFile(modules_extPath$+name$+".zip")
 				EndIf
  				ProcedureReturn 
  			Case #PB_Http_Failed
- 				ConsoleLocate(Len(name$)+10,ConsoleY)
- 				PrintN ("- download failed")
+ 				PrintN (" - download failed")
  				ProcedureReturn 
  			Case #PB_Http_Aborted
- 				ConsoleLocate(Len(name$)+10,ConsoleY)
- 				PrintN ("- download aborted")
+ 				PrintN (" - download aborted")
  				ProcedureReturn 
  			Default
- 				ConsoleLocate(Len(name$)+10,ConsoleY)
  				progressState=progressState+1
- 				If progressState>4 
- 					progressState=1
- 				EndIf
- 				Print ("- download ")
- 				Select progressState
- 				Case 1
- 					Print ("|")
- 				Case 2
- 					Print ("/")
- 				Case 3
- 					Print ("-")
- 				Case 4
- 					Print ("\")
- 				EndSelect
+ 				If progressState=1:Print ("."):EndIf
+ 				If progressState>5:progressState=0:EndIf
  			EndSelect
  			Delay(500) ; Don't stole the whole CPU
  		ForEver
@@ -102,8 +89,11 @@ Procedure Download(addr$,name$="")
  		PrintN ("Download error")	
  	EndIf
 EndProcedure
-
-file=ReadFile(#PB_Any, binPath$+"modext.winnt.txt",#PB_UTF8)
+CompilerIf #PB_Compiler_OS = #PB_OS_MacOS
+	file=ReadFile(#PB_Any, binPath$+"modext.macos.txt",#PB_UTF8)
+CompilerElse
+	file=ReadFile(#PB_Any, binPath$+"modext.winnt.txt",#PB_UTF8)
+CompilerEndIf
 If file<>0
 	Repeat
 		dat$=ReadString(file)	
@@ -127,7 +117,6 @@ If file<>0
 					If FindString(dat$,Chr(34))<>0
 						dat$=ReplaceString(dat$,Chr(34),"")	
 					EndIf
-					
 					Download(Trim(dat$))
 				EndIf
 			Case "COPY"
@@ -135,24 +124,24 @@ If file<>0
 				If FindString(from$,Chr(34))<>0
 					from$=ReplaceString(from$,Chr(34),"")	
 				EndIf
-				from$=Trim(from$)+"\"
+				from$=Trim(from$)+SL$
 				into$=StringField(dat$,2,",")
 				If FindString(into$,Chr(34))<>0
 					into$=ReplaceString(into$,Chr(34),"")	
 				EndIf
-				into$=Trim(into$)+"\"
+				into$=Trim(into$)+SL$
 				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
 			Case "MOVE"
 				from$=StringField(dat$,1,",")
 				If FindString(from$,Chr(34))<>0
 					from$=ReplaceString(from$,Chr(34),"")	
 				EndIf
-				from$=Trim(from$)+"\"
+				from$=Trim(from$)+SL$
 				into$=StringField(dat$,2,",")
 				If FindString(into$,Chr(34))<>0
 					into$=ReplaceString(into$,Chr(34),"")	
 				EndIf
-				into$=Trim(into$)+"\"
+				into$=Trim(into$)+SL$
 				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
 				DeleteDirectory(modules_extPath$+from$,"",#PB_FileSystem_Recursive)
 		EndSelect
@@ -162,13 +151,10 @@ EndIf
 PrintN("Process Completed")
 Delay(2000)
 CloseConsole()
-
-
 ; IDE Options = PureBasic 5.41 LTS (Windows - x86)
 ; ExecutableFormat = Console
-; CursorPosition = 105
-; Folding = +
-; EnableUnicode
+; CursorPosition = 9
+; Folding = s
 ; EnableXP
 ; Executable = modext.exe
 ; CompileSourceDirectory
