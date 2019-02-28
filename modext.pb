@@ -75,7 +75,7 @@ Procedure Download(addr$,name$="",replace=0)
  	    Repeat
  			Progress = HTTPProgress(Download)
  			Select Progress
- 			Case #PB_Http_Success	
+ 			Case #PB_HTTP_Success	
  				Print(" uncompress")
  				CreateDirectory(modules_extPath$+name$)
  				If OpenPack(0,modules_extPath$+name$+".zip") 
@@ -117,10 +117,10 @@ Procedure Download(addr$,name$="",replace=0)
 					DeleteFile(modules_extPath$+name$+".zip")
 				EndIf
  				ProcedureReturn 
- 			Case #PB_Http_Failed
+ 			Case #PB_HTTP_Failed
  				PrintN (" - download failed")
  				ProcedureReturn 
- 			Case #PB_Http_Aborted
+ 			Case #PB_HTTP_Aborted
  				PrintN (" - download aborted")
  				ProcedureReturn 
  			Default
@@ -148,7 +148,7 @@ If file<>0
 		instruction$=Trim(UCase(StringField(dat$,1,"="))) ;get instruction
 		replace=0
 		If FindString(instruction$,"!")<>0
-			instruction$=ReplaceString(instruction$,"!","")
+			instruction$=Trim(ReplaceString(instruction$,"!",""))
 			replace=1
 		EndIf
 		dat$=Trim(StringField(dat$,2,"=")) ;get parameter
@@ -229,11 +229,12 @@ EndIf
 PrintN("Process Completed")
 Delay(2000)
 CloseConsole()
-; IDE Options = PureBasic 5.41 LTS (Windows - x86)
+; IDE Options = PureBasic 5.70 LTS (MacOS X - x64)
 ; ExecutableFormat = Console
-; CursorPosition = 14
-; FirstLine = 165
+; CursorPosition = 150
+; FirstLine = 129
 ; Folding = u
 ; EnableXP
-; Executable = modext.exe
+; Executable = modext_macos
+; CommandLine = -update=diddy -into=extra
 ; CompileSourceDirectory
