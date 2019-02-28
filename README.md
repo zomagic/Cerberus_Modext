@@ -13,15 +13,25 @@ To use/install, copy this file into /bin/ folder of CerberusX
 MacOs
 -----
 To use/install, copy this file into /bin/ folder of CerberusX
-- modext.app
+- modext_macos
 - modext.macos.txt
 
 The source file is using Purebasic (https://www.purebasic.com/)
 This is the file.
 - modext.pb
 
+Commandline Usage
+-----------------
+modext.exe [-into=**modulefolder**][-update[=**folder,folder,...**]]
+
+If not supply -update in commandline(default) then the existing module will not be update. Only new module will be download.<br>
+If -update[=**folder,folder,...**] didn't suply the list of folder, ALL module will be update. If supply, only those list be update
+
+Use -into to give a folder name for your external module. If not supply default will use as **modules_ext**
+
+
 WARNING!! Before run, Please backup your Cerberus\modules_ext\ folder.
-All existing file and folder in Cerberus\modules_ext\ will be replace by the new version once they are downloaded.
+All existing file and folder in Cerberus\modules_ext\ will be replace by the new version if you run with -update
 
 This is the list of module to be download by the app
 - FantomCX
