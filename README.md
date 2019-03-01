@@ -29,9 +29,17 @@ If -update[=**folder,folder,...**] didn't suply the list of folder, ALL module w
 
 Use -into to give a folder name for your external module. If not supply default will use as **modules_ext**
 
+Example1: modext.exe <br>
+This will download everything but will skip if module already exist.<br>
+Example2: modext.exe -into=my_module<br>
+This will download into folder call **my_module**. <br>
+Example3: modext.exe -update<br>
+This will download everything and replace module that already exist.<br>
+Example4: modext.exe -update=diddy,fantomCX<br>
+This will download everything but will not replace anything except diddy and fantomCX modules will be replace.<br>
 
-WARNING!! Before run, Please backup your Cerberus\modules_ext\ folder.
-All existing file and folder in Cerberus\modules_ext\ will be replace by the new version if you run with -update
+WARNING!! All existing module that share the same name will be replace by the new version if you run with -update.<br>
+Please backup your module if nersesary. 
 
 This is the list of module to be download by the app
 - FantomCX
@@ -40,7 +48,12 @@ This is the list of module to be download by the app
 - guiBasic
 - vortex2
 - realtime
-- ..and several others.
+- GIF Loader
+- CRT tv shader
+- SDL2_Mixer
+- Diddy
+- Flixel
+- ..and probably several others.
 You can change them in modext.winnt.txt file
 
 The **modext.winnt.txt** and **modext.macos.txt** act like a source file to tell the program what to download or what to do with it.
