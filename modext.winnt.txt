@@ -65,3 +65,9 @@ MOVE      = "sdl2mixer\modules_ext\sdl2mixer" , "sdl2mixer"
 DOWNLOAD = "https://github.com/swoolcock/diddy"
 MOVE     = "diddy\src\diddy" , "diddy"         			'need to move for properly access it
 COPY     = "diddy\src\threading" , "threading" 			'copy to its own folder 
+
+'Flixel - by Arthur 'devolonter' Bikmullin
+'http://devolonter.github.io/flixel-monkey/
+'https://github.com/devolonter
+'Convert to CX by the help of Ferdi and MikeHart tools
+DOWNLOAD = "https://www.cerberus-x.com/community/attachments/flixel_for_cx-zip.507/","flixel"
