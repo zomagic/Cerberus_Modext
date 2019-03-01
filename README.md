@@ -7,7 +7,7 @@ Purpose: Auto download a collectioin of External Modules for CerberusX (https://
 Windows
 -------
 To use/install, copy this file into /bin/ folder of CerberusX
-- modext.exe
+- modext_winnt.exe
 - modext.winnt.txt
 
 MacOs
@@ -22,20 +22,20 @@ This is the file.
 
 Commandline Usage
 -----------------
-modext.exe [-into=**modulefolder**][-update[=**folder,folder,...**]]
+modext_winnt.exe [-into=**modulefolder**][-update[=**folder,folder,...**]]
 
 If not supply -update in commandline(default) then the existing module will not be update. Only new module will be download.<br>
 If -update[=**folder,folder,...**] didn't suply the list of folder, ALL module will be update. If supply, only those list be update
 
 Use -into to give a folder name for your external module. If not supply default will use as **modules_ext**
 
-Example1: modext.exe <br>
+Example1: modext_winnt.exe <br>
 This will download everything but will skip if module already exist.<br>
-Example2: modext.exe -into=my_module<br>
+Example2: modext_winnt.exe -into=my_module<br>
 This will download into folder call **my_module**. <br>
-Example3: modext.exe -update<br>
+Example3: modext_winnt.exe -update<br>
 This will download everything and replace module that already exist.<br>
-Example4: modext.exe -update=diddy,fantomCX<br>
+Example4: modext_winnt.exe -update=diddy,fantomCX<br>
 This will download everything but will not replace anything except diddy and fantomCX modules will be replace.<br>
 
 WARNING!! All existing module that share the same name will be replace by the new version if you run with -update.<br>
@@ -53,6 +53,7 @@ This is the list of module to be download by the app
 - SDL2_Mixer
 - Diddy
 - Flixel
+- SimpleUI
 - ..and probably several others.
 You can change them in modext.winnt.txt file
 
