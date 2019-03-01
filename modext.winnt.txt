@@ -71,3 +71,10 @@ COPY     = "diddy\src\threading" , "threading" 			'copy to its own folder
 'https://github.com/devolonter
 'Convert to CX by the help of Ferdi and MikeHart tools
 DOWNLOAD = "https://www.cerberus-x.com/community/attachments/flixel_for_cx-zip.507/","flixel"
+
+'SimpleUI and argyne by Nobuyuki (nobuyukinyuu)
+'https://github.com/nobuyukinyuu/SimpleUI/
+'https://github.com/nobuyukinyuu/argyne
+DOWNLOAD = "https://www.cerberus-x.com/community/attachments/simpleui-zip.509/","SimpleUI"
+DOWNLOAD = "https://www.cerberus-x.com/community/attachments/argyne-zip.510/","argyne"
+

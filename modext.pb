@@ -43,6 +43,7 @@ Global modules_extPath$ = Left(binPath$,Len(binPath$)-4)+ModuleFolder$+SL$
 If FileSize(modules_extPath$)<>-2
 	CreateDirectory(modules_extPath$)
 EndIf
+Global lastDownload$=""
 Procedure Download(addr$,name$="",replace=0)
 	If name$="":name$ = StringField(addr$,CountString(addr$,"/")+1, "/"):EndIf
 	Print ("Process: "+name$)
@@ -71,11 +72,12 @@ Procedure Download(addr$,name$="",replace=0)
 	Else
 		Download = ReceiveHTTPFile(addr$,modules_extPath$+name$+".zip",#PB_HTTP_Asynchronous)
 	EndIf
- 	If Download
+	If Download
+		lastDownload$=name$
  	    Repeat
  			Progress = HTTPProgress(Download)
  			Select Progress
- 			Case #PB_HTTP_Success	
+ 			Case #PB_Http_Success	
  				Print(" uncompress")
  				CreateDirectory(modules_extPath$+name$)
  				If OpenPack(0,modules_extPath$+name$+".zip") 
@@ -94,6 +96,7 @@ Procedure Download(addr$,name$="",replace=0)
 								CompilerElse
 									filename$=ReplaceString(filename$,"/","\")
 								CompilerEndIf
+								;Debug filename$
 								CreateDirectory(filename$)
 							Else
 								filename$=modules_extPath$+PackEntryName(0)
@@ -108,6 +111,7 @@ Procedure Download(addr$,name$="",replace=0)
 								CompilerElse
 									filename$=ReplaceString(filename$,"/","\")
 								CompilerEndIf
+								;Debug filename$
 								UncompressPackFile(0, filename$)
 							EndIf
 						Wend
@@ -117,10 +121,10 @@ Procedure Download(addr$,name$="",replace=0)
 					DeleteFile(modules_extPath$+name$+".zip")
 				EndIf
  				ProcedureReturn 
- 			Case #PB_HTTP_Failed
+ 			Case #PB_Http_Failed
  				PrintN (" - download failed")
  				ProcedureReturn 
- 			Case #PB_HTTP_Aborted
+ 			Case #PB_Http_Aborted
  				PrintN (" - download aborted")
  				ProcedureReturn 
  			Default
@@ -155,6 +159,7 @@ If file<>0
 		Select instruction$
 			Case "DOWNLOAD"
 				If FindString(dat$,",")<>0
+					;spacify the name
 					name$=StringField(dat$,2,",")
 					If FindString(name$,Chr(34))<>0
 						name$=ReplaceString(name$,Chr(34),"")	
@@ -165,6 +170,7 @@ If file<>0
 					EndIf
 					Download(Trim(dat$),Trim(name$),replace)
 				Else
+					;not spacify the name
 					If FindString(dat$,Chr(34))<>0
 						dat$=ReplaceString(dat$,Chr(34),"")	
 					EndIf
@@ -184,6 +190,9 @@ If file<>0
 				If replace=0
 					If FileSize(modules_extPath$+into$)=-2 ;check folder exist?
 						needupdate=0
+						If lastDownload$+SL$=into$
+							needupdate=1
+						EndIf
 						ForEach update() 
 							If update()=name$ Or update()="ALL"
 								needupdate=1
@@ -193,7 +202,8 @@ If file<>0
 							Goto done
 						EndIf
 					EndIf
-				EndIf				
+				EndIf	
+				;Debug "copy "+into$
 				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
 			Case "MOVE"
 				from$=StringField(dat$,1,",")
@@ -209,6 +219,9 @@ If file<>0
 				If replace=0
 					If FileSize(modules_extPath$+into$)=-2 ;check folder exist?
 						needupdate=0
+						If lastDownload$+SL$=into$
+							needupdate=1
+						EndIf
 						ForEach update() 
 							If update()=name$ Or update()="ALL"
 								needupdate=1
@@ -218,7 +231,8 @@ If file<>0
 							Goto done
 						EndIf
 					EndIf
-				EndIf				
+				EndIf	
+				;Debug "move "+into$
 				CopyDirectory(modules_extPath$+from$,modules_extPath$+into$,"",#PB_FileSystem_Recursive)
 				DeleteDirectory(modules_extPath$+from$,"",#PB_FileSystem_Recursive)
 		EndSelect
@@ -229,12 +243,12 @@ EndIf
 PrintN("Process Completed")
 Delay(2000)
 CloseConsole()
-; IDE Options = PureBasic 5.70 LTS (MacOS X - x64)
+; IDE Options = PureBasic 5.41 LTS (Windows - x86)
 ; ExecutableFormat = Console
-; CursorPosition = 150
-; FirstLine = 129
-; Folding = u
+; CursorPosition = 234
+; FirstLine = 154
+; Folding = v
 ; EnableXP
-; Executable = modext_macos
-; CommandLine = -update=diddy -into=extra
+; Executable = modext_winnt.exe
+; CommandLine = -update=diddy -into=mod_my
 ; CompileSourceDirectory
