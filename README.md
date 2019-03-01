@@ -39,7 +39,7 @@ Example4: modext.exe -update=diddy,fantomCX<br>
 This will download everything but will not replace anything except diddy and fantomCX modules will be replace.<br>
 
 WARNING!! All existing module that share the same name will be replace by the new version if you run with -update.<br>
-Please backup your module if nersesary. 
+Please backup your modules if necessary.
 
 This is the list of module to be download by the app
 - FantomCX
