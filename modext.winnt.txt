@@ -78,3 +78,6 @@ DOWNLOAD = "https://www.cerberus-x.com/community/attachments/flixel_for_cx-zip.5
 DOWNLOAD = "https://www.cerberus-x.com/community/attachments/simpleui-zip.509/","SimpleUI"
 DOWNLOAD = "https://www.cerberus-x.com/community/attachments/argyne-zip.510/","argyne"
 
+'Challenger GUI 1.6 - by Christopher Challenger
+DOWNLOAD = "https://www.cerberus-x.com/community/attachments/challenger-gui-1-6-zip.308/","challengergui"
+MOVE     = "challengergui\Modules\challengergui" , "challengergui"
