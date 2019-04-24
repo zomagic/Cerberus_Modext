@@ -17,7 +17,7 @@
 
 'FantomCX 3.00b - byu Michael Hartlef
 'https://github.com/MikeHart66
-DOWNLOAD = "https://github.com/MikeHart66/fantomCX/releases/download/v3.00b/fantomCX_V300b.zip","fantomCX"
+DOWNLOAD = "https://github.com/MikeHart66/fantomCX/archive/v3.01.zip","fantomCX"
 
 ' ▄█  █▄   ▄████▄
 '███▄▄███ ████▀▀▀▀  Holzchopf
