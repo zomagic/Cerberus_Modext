@@ -6,19 +6,21 @@ Purpose: Auto download a collectioin of External Modules for CerberusX (https://
 
 Windows
 -------
-To use/install, copy this file into /bin/ folder of CerberusX
+To use, copy this file into /bin/ folder of CerberusX
 - modext_winnt.exe
 - modext.winnt.txt
 
 MacOs
 -----
-To use/install, copy this file into /bin/ folder of CerberusX
+To use, copy this file into /bin/ folder of CerberusX
 - modext_macos
 - modext.macos.txt
 
-The source file is using Purebasic (https://www.purebasic.com/)
-This is the file.
-- modext.pb
+The source file is using BlitzMax
+'Compile with BlitzMax NG (bmk-3.31) (bcc-0.99) https://blitzmax.org/downloads/
+'Brucey module 
+'https://github.com/maxmods/bah.mod/tree/master/libcurl.mod
+'https://github.com/maxmods/gman.mod
 
 Commandline Usage
 -----------------
@@ -39,7 +41,7 @@ Example4: modext_winnt.exe -update=diddy,fantomCX<br>
 This will download everything but will not replace anything except diddy and fantomCX modules will be replace.<br>
 
 WARNING!! All existing module that share the same name will be replace by the new version if you run with -update.<br>
-Please backup your modules if necessary.
+Please backup your modules if necessary. Better safe than sorry!
 
 This is the list of module to be download by the app
 - FantomCX
