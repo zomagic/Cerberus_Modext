@@ -1,28 +1,24 @@
 '---------------------------------------------------------------------------------------------------------
-'use DOWNLOAD command to download a file 
-'	-First parameter is the download address
-'		-For module in Github just give the address of main repo name like 
-'		 "https://github.com/swoolcock/diddy"
-'	-The second parameter is folder name to be use in Cerberus\modules_ext\? 
-'	 	-This is optional. If not supply it will use repo name or file name.
-'	-Use ! if infront of DOWNLOAD command to force to replace if folder already exist 
-'---------------------------------------------------------------------------------------------------------
-'use COPY or MOVE command to copy or move from folder to another folder 
-'Because sometime the main folder name is not the module name
-'But only folder inside ..modules_ext\*.* is allow to be move/copy
-'	-First parameter is the source folder (without ..modules_ext\ path)
-'	-Second parameter is the destination folder (without ..modules_ext\ path)
-'	-Use ! if infront of COPY or MOVE command to force to replace if folder already exist 
+'This file act like a source code by modext app to get the list of modules
+'Command:
+'   [!] DOWNLOAD = <link> , <module_name>
+'     *This is the command to automatic download and unzip a module into <module_name>
+'     *For module in Github just give the address of main repo name like "https://github.com/swoolcock/diddy"
+'     *If <module_name> is not supply it will use repo name or zip file name.
+'     *Use ! if infront of DOWNLOAD command to force to replace if folder already exist 
+'   [!] MOVE = <fromFolder> , <toFolder>
+'   [!] COPY = <fromFolder> , <toFolder>
+'     *use COPY or MOVE command to copy or move from folder to another folder
+'     *the way to name folder:
+'       -<fromFolder> and <toFolder> is not a real folder path.
+'       -is only deal with item inside modules_ext. Example name: "sdl2mixer\modules_ext\sdl2mixer" , "sdl2mixer"
+'       -Use ! if infront of COPY or MOVE command to force to replace if folder already exist 
 '---------------------------------------------------------------------------------------------------------
 
 'FantomCX 3.00b - byu Michael Hartlef
-'https://github.com/MikeHart66
-DOWNLOAD = "https://github.com/MikeHart66/fantomCX/archive/v3.01.zip","fantomCX"
+DOWNLOAD = "https://github.com/MikeHart66/fantomCX/","fantomCX"
 
-' ▄█  █▄   ▄████▄
-'███▄▄███ ████▀▀▀▀  Holzchopf
-'███▀▀███ ████▄▄▄▄  www.holzchopf.ch
-' ▀█  █▀   ▀████▀ 
+'Holzchopf - www.holzchopf.ch
 !DOWNLOAD = "https://www.cerberus-x.com/community/attachments/holzchopf-cubicbezierease-20180709-zip.317/","holzchopf"
 !DOWNLOAD = "https://www.cerberus-x.com/community/attachments/holzchopf-mojo2overlayshaders-20180309-zip.255/","holzchopf"
 !DOWNLOAD = "https://www.cerberus-x.com/community/attachments/holzchopf-mojo2maskshaders-20180309-zip.249/","holzchopf"
@@ -33,48 +29,40 @@ DOWNLOAD = "https://github.com/MikeHart66/fantomCX/archive/v3.01.zip","fantomCX"
 DOWNLOAD = "https://www.cerberus-x.com/community/attachments/fontmachine-zip.137/","fontmachine"
 
 'GUI Basic by Christopher Challenger
-'Cerberus X conversion by Memzen
-DOWNLOAD = "https://www.cerberus-x.com/community/attachments/guibasic_2019-02-08-zip.476/","guiBasic"
-MOVE     = "guiBasic/guiBasic" , "guiBasic"         	
+DOWNLOAD = "https://github.com/zomagic/guiBasic","guiBasic"
+MOVE     = "guiBasic\guiBasic" , "guiBasic"         	
 
 'VORTEX by Javier San Juan Cervera
-DOWNLOAD = "https://github.com/JaviCervera/vortex/releases/download/v2.0-beta/vortex_2.0-beta_mac.zip","vortex"
+DOWNLOAD = "https://github.com/JaviCervera/vortex/releases/download/v2.0-beta/vortex_2.0-beta_win32.zip","vortex"
 
 'Access to camera photos by Rich Pantson
 DOWNLOAD = "https://github.com/pantson/cerberusx-rch-modules","rch"
-MOVE     = "rch/rch" , "rch"         	   
+MOVE     = "rch\rch" , "rch"         	   
 
 'REALTIME by Martin Leidel
 DOWNLOAD  = "https://github.com/KrautApps/Realtime","realtime"
-MOVE      = "realtime/modules_ext/realtime","realtime"
+MOVE      = "realtime\modules_ext\realtime","realtime"
 
 'MonkeyX GIF Loader Originally by CopperCircle
-'Optimised by muddy_shoes
-'Ported to mojo2 by wickworks
 DOWNLOAD="https://github.com/ootsby/GIF-Loader","gif"
 
 'CRT tv shader by PixelPaladin
 DOWNLOAD = "https://github.com/PixelPaladin/cx-crt","crt"
-MOVE     = "crt/crt" , "crt"         	   
+MOVE     = "crt\crt" , "crt"         	   
 
 'SDL2_Mixer by Ivelle Games
 DOWNLOAD  = "https://github.com/IvelleGames/CerberusSDL2_Mixer","sdl2mixer"
-MOVE      = "sdl2mixer/modules_ext/sdl2mixer" , "sdl2mixer"  
+MOVE      = "sdl2mixer\modules_ext\sdl2mixer" , "sdl2mixer"  
 
 'Diddy - by Shane Woolcock and Steven Revill
 DOWNLOAD = "https://github.com/swoolcock/diddy"
-MOVE     = "diddy/src/diddy" , "diddy"         			'need to move for properly access it
-COPY     = "diddy/src/threading" , "threading" 			'copy to its own folder 
+MOVE     = "diddy\src\diddy" , "diddy"         			'need to move for properly access it
+COPY     = "diddy\src\threading" , "threading" 			'copy to its own folder 
 
 'Flixel - by Arthur 'devolonter' Bikmullin
-'http://devolonter.github.io/flixel-monkey/
-'https://github.com/devolonter
-'Convert to CX by the help of Ferdi and MikeHart tools
 DOWNLOAD = "https://www.cerberus-x.com/community/attachments/flixel_for_cx-zip.507/","flixel"
 
 'SimpleUI and argyne by Nobuyuki (nobuyukinyuu)
-'https://github.com/nobuyukinyuu/SimpleUI/
-'https://github.com/nobuyukinyuu/argyne
 DOWNLOAD = "https://www.cerberus-x.com/community/attachments/simpleui-zip.509/","SimpleUI"
 DOWNLOAD = "https://www.cerberus-x.com/community/attachments/argyne-zip.510/","argyne"
 
