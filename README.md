@@ -63,15 +63,34 @@ You can change them in modext.winnt.txt file
 
 The **modext.winnt.txt** and **modext.macos.txt** act like a source file to tell the program what to download or what to do with it.
 
-Use DOWNLOAD command to download a file 
-- First parameter is the download address. For module in Github you can just give the address of main repo name  
-- The second parameter is folder name to be use in Cerberus\modules_ext\? .This is optional. If not supply it will use the github repo name or zip filename
-- Use ! if infront of DOWNLOAD command to force to replace if folder already exist. This module will always update every run 
+There are 3 commands:
 
-use COPY or MOVE command to copy or move from folder to another folder. Because sometime the main folder name is not the module name.
-But only folder inside ..modules_ext\*.* is allow to be move/copy
-- First parameter is the source folder (without ..modules_ext\ path)
-- Second parameter is the destination folder (without ..modules_ext\ path)
-- Use ! if infront of COPY or MOVE command to force to replace if folder already exist 
+Use DOWNLOAD command to download a file:
 
+    [!] DOWNLOAD = <link> , <module_name>
+
+    This is the command to automatic download and unzip a module into <module_name>
+    For module in Github just give the address of main repo name like "https://github.com/swoolcock/diddy"
+    If <module_name> is not supply it will use repo name or zip file name.
+    Use ! if infront of DOWNLOAD command to force to replace if folder already exist 
+
+Use COPY or MOVE command to copy or move from folder to another folder:
+
+    [!] MOVE = <fromFolder> , <toFolder>
+    [!] COPY = <fromFolder> , <toFolder>
+
+    Use COPY or MOVE command to copy or move from folder to another folder
+    The way to name folder:
+      -<fromFolder> and <toFolder> is not a real folder path.
+      -is only deal with item inside modules_ext. Example name: "sdl2mixer\modules_ext\sdl2mixer" , "sdl2mixer"
+      -Use ! if infront of COPY or MOVE command to force to replace if folder already exist 
+
+Example source:
+  
+  DOWNLOAD = "https://github.com/MikeHart66/fantomCX/","fantomCX"
+  DOWNLOAD = "https://github.com/zomagic/guiBasic","guiBasic"
+  MOVE     = "guiBasic\guiBasic" , "guiBasic"
+  DOWNLOAD = "https://github.com/swoolcock/diddy"
+  MOVE     = "diddy\src\diddy" , "diddy"         		
+  COPY     = "diddy\src\threading" , "threading" 	
 
