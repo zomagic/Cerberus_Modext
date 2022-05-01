@@ -90,7 +90,7 @@ Example source:
     DOWNLOAD = "https://github.com/MikeHart66/fantomCX/","fantomCX"
     DOWNLOAD = "https://github.com/zomagic/guiBasic","guiBasic"
     MOVE     = "guiBasic\guiBasic" , "guiBasic"
-      DOWNLOAD = "https://github.com/swoolcock/diddy"
+    DOWNLOAD = "https://github.com/swoolcock/diddy"
     MOVE     = "diddy\src\diddy" , "diddy"         		
     COPY     = "diddy\src\threading" , "threading" 	
 
